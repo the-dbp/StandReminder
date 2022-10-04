@@ -43,15 +43,22 @@ def sit_stand_window(what_window):
     adjustx = -20
     # Add buttons
     if (what_window == "start"):
-        button1 = Button(root, text=f"Awesome! \o/ see you in {int(sit_time/60)} minutes", bg="#3DB93B", font=fontStyle,
+        button1 = Button(root, text=f"I'm sitting, see you in {int(sit_time / 60)} minutes", bg="#3DB93B",
+                         font=fontStyle,
                          command=lambda: close_window(root))
         button1.pack(pady=20)
-        button1.place(x=50 + adjustx, y=200)
+        button1.place(relx=0.5, y=175, anchor=CENTER)
+
+        button1_5 = Button(root, text=f"I'm standing, see you in {int(stand_time / 60)} minutes", bg="#3DB93B",
+                           font=fontStyle,
+                           command=lambda: start_standing(root))
+        button1_5.pack(pady=20)
+        button1_5.place(relx=0.5, y=225, anchor=CENTER)
 
         button2 = Button(root, text="Nevermind (¬_¬ )", bg="#3DB93B", font=fontStyle,
                          command=lambda: close_program(root))
         button2.pack(pady=20)
-        button2.place(x=150 + adjustx, y=250)
+        button2.place(relx=0.5, y=275, anchor=CENTER)
 
     elif (what_window == "stand"):
         button1 = Button(root, text="I'm standing! \o/", bg="#3DB93B", font=fontStyle,
@@ -103,17 +110,30 @@ def snooze_window(window_root, what_window):
     window_root.destroy()
     time.sleep(snooze_time)
     sit_stand_window(what_window)
-
+def start_standing(window_root):
+    global close
+    close = False
+    window_root.destroy()
+    if not "start_fast" in sys.argv:
+        time.sleep(stand_time)
+    else:
+        print(stand_time)
+    sit_stand_window("sit")
 
 def loop():
     sit_stand_window("start")
     while not close:
-        if (not "start_fast" in sys.argv):
+        if not "start_fast" in sys.argv:
             time.sleep(sit_time)
+        else:
+            print(sit_time)
         sit_stand_window("stand")
         if close:
             return
-        time.sleep(stand_time)
+        if not "start_fast" in sys.argv:
+            time.sleep(stand_time)
+        else:
+            print(stand_time)
         sit_stand_window("sit")
         if close:
             return
